@@ -1,0 +1,23 @@
+question_id,kind,country,question,expected_title,expected_section,expected_answer
+q01,fact,Montenegro,How much is the entry fee for Durmitor National Park?,Durmitor National Park,Fees and permits,€5 per day (checked 2025).
+q02,fact,Croatia,How much does an adult ticket to Plitvice Lakes cost in July?,Plitvice Lakes National Park,Fees and permits,€40 for adults (1 June-30 September); €26.50 if entering after 4 PM in June-August.
+q03,practical,Albania,Can I drive to Theth in winter?,Thethi,Get in,No: the road (SH21 from Koplik) is closed from November to April.
+q04,fact,Albania,"How long does the hike from Theth to Valbona take, and how hard is it?",Thethi,Do,"6-8 hours, via the Valbona Pass (1814 m); difficulty T2; marked red and white."
+q05,recommendation,Kosovo,Where can I try a via ferrata in Kosovo?,Rugova Mountains,Via Ferrata,"In the Peja-Rugova Gorge (Rugova Mountains): 4 via ferrata trails, 300-1000 m long, reaching up to 300 m in height."
+q06,practical,Romania,Do I need a permit or a ticket to hike in Retezat National Park?,Retezat National Park,Fees and permits,"No permit or fee is needed; there are no bins, not even at huts, so carry your rubbish out."
+q07,safety,Albania,Is it safe to hike off the marked trails around Valbona?,Valbona Valley National Park,Stay safe,"Take care: unexploded ordnance from the Kosovo conflict is an issue off the beaten path, and the UK, Australia and Canada advise against travel to the Tropoja district, although law and order has improved greatly."
+q08,fact,North Macedonia,"What are Pelister's Eyes, and can I swim there?",Pelister National Park,See,"Two mountain lakes: the Big lake at 2,218 m and the Small lake at 2,180 m; swimming is possible in the small one in summer; about a 5-hour walk from Dihovo, one way."
+q09,safety,Romania,What should I watch out for when hiking in Piatra Craiului?,Piatra Craiului National Park,Stay safe,"Bears, especially in spring when they have cubs (back away slowly, do not run, make noise), and shepherd dogs guarding flocks (call the shepherd, carry a stick)."
+q10,fact,Bulgaria,"What is the highest peak on Vitosha, and is there an easy way up?",Vitosha,Do,"Cherni Vrah, 2290 m; a lift from an outer neighbourhood of Sofia goes to just below the summit."
+q11,recommendation,Serbia,What is the best viewpoint in Tara National Park?,Tara National Park,See,"Banjska stena, with views of the mountains, Perućac Lake and the Drina River; about a 6 km hike from Mitrovac."
+q12,fact,Bosnia and Herzegovina,How much does it cost to enter Una National Park?,Una National Park,Fees and permits,"Between 5.50 KM and 25 KM for a single adult, depending on the season and the section; see the park website."
+q13,comparison,Montenegro,"Which is cheaper to enter, Durmitor or Biogradska Gora National Park?",Biogradska Gora National Park; Durmitor National Park,Fees and permits,"Biogradska Gora: €3 (as of August 2013, so possibly outdated); Durmitor: €5 per day (2025)."
+q14,comparison,Croatia,Can I swim at Plitvice Lakes or at Krka National Park?,Plitvice Lakes National Park; Krka National Park,Do,"Plitvice: no, swimming is not allowed anywhere in the park. Krka: only in the designated area in the lower lake at Skradinski buk, and not between 1 October and 31 May."
+q15,fact,Bulgaria,Is Pirin National Park a UNESCO World Heritage site?,Pirin National Park,Introduction,"Yes, part of UNESCO's World Heritage since 1983."
+q16,practical,Montenegro,How can I get to Zabljak from Podgorica airport?,Žabljak,Get in,"By taxi: about €70 and about 2 hours; or by bus, with buses from Podgorica. The airport is about 170 km away."
+q17,recommendation,Albania,I'd like a long multi-day trek through the Accursed Mountains. What do you suggest?,Prokletije,Get around,"The Peaks of the Balkans, a 192-km circular hiking trail through the Accursed Mountains."
+q18,practical,North Macedonia,Do I have to pay to enter Galičica National Park?,Galičica National Park,Fees and permits,"In principle there is an entry fee, but in practice there seem to be no ticket booths at any entrance."
+q19,out_of_scope,Montenegro,Is there snow on the trail to Bobotov Kuk this weekend?,,,REFUSE: live trail conditions are not in the guides.
+q20,out_of_scope,,What are the best hikes in Triglav National Park?,,,"REFUSE: Triglav is in Slovenia, outside the region covered."
+q21,out_of_scope,Albania,What will the weather be like in Theth tomorrow?,,,REFUSE: no live weather in the guides.
+q22,out_of_scope,Montenegro,Can you book me a room in Žabljak for next Friday?,,,"REFUSE: the assistant answers questions, it cannot make bookings."

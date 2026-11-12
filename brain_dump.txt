@@ -1,0 +1,2 @@
+“Trail Scout”: a Balkans mountains-and-nature assistant that recommends hiking areas and national parks from Wikivoyage guides, 
+cites the articles it used, refuses live or safety-critical questions it can’t answer, and takes into account the places you’ve already been.

@@ -2,6 +2,7 @@
 data/raw/*
 !data/raw/.gitkeep
 !data/README.md
+data/visited_places.csv
 
 # Models, indexes and experiment runs are build artefacts: the notebooks recreate them.
 models/*

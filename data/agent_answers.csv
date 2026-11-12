@@ -1,0 +1,41 @@
+question_id,answer,tools,retrieved,cited,input_tokens,output_tokens,cost_usd,seconds,stopped
+q01,The entry fee for Durmitor National Park is **€5 per day (2025)**. [wv-2832],search_guides,wv-2832;wv-2830;wv-2835;wv-2838;wv-2831,wv-2832,1471,53,0.00036045,4.49,False
+q02,"In July (which falls in 1 June–30 September), an adult ticket to Plitvice Lakes costs **€59.70**. [wv-6501]",search_guides,wv-6501;wv-6502;wv-6500;wv-6499;wv-6503,wv-6501,1677,63,0.00041415,2.36,False
+q03,"Driving to Theth in winter is generally **not advisable** to do on your own, especially in bad weather, unless you have a **high-clearance vehicle** (4WD can be handy). [wv-167] The final **15–20 km** into Theth is **steep, rocky, and unpaved**, so a low-clearance car can be a problem even outside winter. [wv-73] In Albania, **snow chains are allowed** from **1 Nov to 30 Apr** (and must be fitted on at least **2 driving wheels**). [wv-73]",search_guides,wv-167;wv-7744;wv-7599;wv-73;wv-3422,wv-167;wv-73,1603,152,0.0005106,2.7,False
+q04,"The hike from Theth to Valbona takes **6–8 hours**. [wv-9838]  
+Its difficulty is listed as **T2** (moderate). [wv-9838]  
+The route goes from **Theth (742 m) → Valbona Pass (1814 m) → Rragam → Valbona** and is **well marked (red and white)**. [wv-9838]",search_guides,wv-10481;wv-9838;wv-10480;wv-11442;wv-10468,wv-9838,1662,122,0.0004849,3.03,False
+q05,I don't know based on my guides.,search_guides,wv-3018;wv-11077;wv-6691;wv-3016;wv-6995,,1334,35,0.00031055,1.77,False
+q06,"You don’t need a permit or to pay a fee to access Retezat National Park. [wv-7445]  
+If you do something against the rules, you can get fined (for example, there’s no place to leave garbage, not even at huts, so you have to carry it with you). [wv-7445]",search_guides,wv-7445;wv-2832;wv-3147;wv-10471;wv-4881,wv-7445,1203,99,0.00036435000000000005,2.37,False
+q07,I don't know based on my guides.,search_guides,wv-10480;wv-10475;wv-10473;wv-10482;wv-10468,,1607,36,0.0003664,1.91,False
+q08,"Pelister’s Eyes are two mountain lakes (the Big lake at 2,218 m and the Small lake at 2,180 m) inside Pelister National Park; they feed many rivers. [wv-6281]  
+Yes—it's possible to swim in the Small lake during summer time. [wv-6281]  
+There’s also about a 5-hour walk from Dihovo to the Small lake (one way). [wv-6281]",search_guides,wv-6281;wv-6278;wv-6277;wv-3694;wv-6954,wv-6281,1451,120,0.00044019999999999997,2.14,False
+q09,"Watch out for bears: camping lower on the mountains can be risky (especially in spring when bears have cubs), and if you encounter bears with young you should back away slowly (don’t run) while making some noise. [wv-6375]  
+Be alert for thunderstorms on the ridge—lightning strikes are common there, and there are not many ways to descend; the ridge shelters are said to be safe from lightning. [wv-6375]  
+Bring enough water before ascending because there’s no water on the ridge (springs are at the foot of the mountain and can be hard to find). [wv-6376]  
+The trails can be steep and some sections use steel cables (“Lanturi”/chains), so take extra care on those. [wv-6367]  
+Avoid walking in the forest at night. [wv-6375]",search_guides,wv-6375;wv-6376;wv-6370;wv-6367;wv-6374,wv-6367;wv-6375;wv-6376,1620,213,0.00059025,2.78,False
+q10,"The highest summit on Vitosha is **Cherni Vrah (“The Black Peak”) at 2290 m**. [wv-10862]  
+There’s an **easy way up using the lift**: the guides note that there is a **cabin lift from Sofia** that goes to **just below the peak**, making it a very convenient ascent. [wv-10862]  
+Vitosha is also described as having **numerous tourist routes and picnic areas** with panoramic views, so you can likely choose a less strenuous hike from the lift area. [wv-10857]",search_guides,wv-10862;wv-10858;wv-10857;wv-10859;wv-1747,wv-10857;wv-10862,1651,154,0.0005227000000000001,2.49,False
+q11,"The best viewpoint in Tara National Park is **Banjska stena**, which offers “breathtaking views” of the surrounding mountains, **Perućac Lake**, and the **Drina River**. [wv-9648]  
+To reach it, you first need to get to **Mitrovac**, then hike for a couple of hours (about **6 km**). [wv-9648]",search_guides,wv-9644;wv-9649;wv-9648;wv-9645;wv-9653,wv-9648,1379,111,0.00041455,2.22,False
+q12,"For Una National Park (Bosnia and Herzegovina), the single adult entrance price varies by season and the specific section you’re visiting, and can range from **5.50 KM to 25 KM**. [wv-10401]",search_guides,wv-10401;wv-3147;wv-5418;wv-2155;wv-6501,wv-10401,1360,81,0.00037325,2.1,False
+q13,"Durmitor National Park charges **€5 per day** to enter. [wv-2832]  
+Biogradska Gora National Park charges an **admittance fee of €3**. [wv-825]  
+So, **Biogradska Gora is cheaper** to enter. [wv-2832][wv-825]",search_guides,wv-2832;wv-825;wv-2835;wv-2831;wv-2838,wv-2832;wv-825,1502,113,0.00044165000000000003,2.1,False
+q14,"I don’t know based on my guides whether swimming is allowed at Plitvice Lakes National Park. [wv-6497]  
+At Krka National Park, swimming is only allowed in the designated swimming area at the lower lake at Skradinski buk. [wv-4521]  
+Swimming is prohibited outside the clearly designated area, and it’s not allowed between 1 October and 31 May. [wv-4521] [wv-4528]",search_guides;search_guides;search_guides,wv-6497;wv-6522;wv-6512;wv-6532;wv-6503;wv-4521;wv-4528;wv-4507;wv-4505;wv-4516;wv-6500;wv-6538,wv-4521;wv-4528;wv-6497,5423,169,0.00129585,3.53,False
+q15,"Yes—Pirin National Park (Pirin Macedonia, Bulgaria) has been part of the UNESCO World heritage since 1983. [wv-6408]",search_guides,wv-6408;wv-6431;wv-6419;wv-6426;wv-6410,wv-6408,1290,60,0.000333,1.84,False
+q16,"You can get from **Podgorica Airport to Žabljak** by **taxi** (direct transfer) for about **€70**, taking roughly **2 hours**. [wv-11432]  
+If you prefer public transport, the guide only mentions that Podgorica Airport has a **fairly regular shuttle bus** around flight times to Podgorica town (with timing details via BusTicket4me). [wv-6647]  
+From there, you’d need further onward transport to Žabljak, but that part isn’t specified in the guide excerpt I found. [wv-6647]",search_guides,wv-11432;wv-6647;wv-6655;wv-6651;wv-2011,wv-11432;wv-6647,1512,160,0.0005024000000000001,2.72,False
+q17,I don't know based on my guides.,search_guides,wv-9691;wv-11442;wv-9690;wv-3497;wv-1272,,1539,37,0.00035405,1.67,False
+q18,"In principle, an entry fee exists for Galičica National Park, but in practice there seem to be no ticket booths at any of the entrances. [wv-3147]",search_guides,wv-3147;wv-10401;wv-3145;wv-10471;wv-6501,wv-3147,1384,68,0.0003618,1.66,False
+q19,I don't know based on my guides.,search_guides,wv-1751;wv-4667;wv-4662;wv-6260;wv-4565,,1656,38,0.00037870000000000004,1.5,False
+q20,I don't know based on my guides.,search_guides;search_guides,wv-6370;wv-6419;wv-6411;wv-6415;wv-11442;wv-8143;wv-5422,,3635,58,0.0007995,2.74,False
+q21,I don't know based on my guides.,search_guides,wv-11459;wv-6435;wv-42;wv-3087;wv-1322,,1464,32,0.0003328,2.94,False
+q22,I don't know based on my guides.,search_guides,wv-11451;wv-10724;wv-4071;wv-11448;wv-11446,,1482,36,0.00034140000000000006,1.64,False
