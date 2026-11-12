@@ -1,0 +1,6 @@
+[theme]
+primaryColor = "#4f9b63"                # forest green: buttons, sliders, links, selected tab
+backgroundColor = "#ffffff"             # the page
+secondaryBackgroundColor = "#eef3ee"    # sidebar, chat bubbles, expanders, inputs
+textColor = "#1f2a24"                   # the text
+font = "sans serif"  

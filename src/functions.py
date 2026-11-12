@@ -17,7 +17,7 @@ The stubs below only show the shape. Rename them, change the arguments, delete
 the ones for the other track, write your own.
 """
 
-"""Reusable logic for Trail Scout, imported by the notebooks and the Streamlit app.
+"""Reusable logic for Mountain Goat, imported by the notebooks and the Streamlit app.
  
 The pipeline from raw Wikivoyage wikitext to searchable chunks:
  
@@ -588,7 +588,7 @@ def add_visit(title: str, rating: int, chunks: pd.DataFrame, note: str = "", vis
  
 # --- The tools and the agent -------------------------------------------------------
  
-AGENT_PROMPT = f"""You are Trail Scout, an assistant for hikers and nature travellers in the Balkans (Albania, Bosnia and Herzegovina, Bulgaria, Croatia, Kosovo, Montenegro, North Macedonia, Romania, Serbia).
+AGENT_PROMPT = f"""You are Mountain Goat, an assistant for hikers and nature travellers in the Balkans (Albania, Bosnia and Herzegovina, Bulgaria, Croatia, Kosovo, Montenegro, North Macedonia, Romania, Serbia).
 Rules:
 - Use search_guides for any question about places, parks, hikes, fees, getting there or staying there. Answer only from what it returns, never from your own knowledge.
 - Use get_visited_places when the user asks for a recommendation or mentions the places they have been. Do not recommend a place they have already visited and use their ratings to understand what they like.
@@ -621,7 +621,7 @@ def make_tools(collection, embedder, visited_path: Path = VISITED_FILE):
  
  
 def make_agent(collection, embedder, visited_path: Path = VISITED_FILE, memory: bool = False):
-    """Create the Trail Scout agent with LangChain.
+    """Create the Mountain Goat agent with LangChain.
  
     With memory=True it gets an InMemorySaver checkpointer: pass a thread_id to
     run_agent() and it remembers the earlier messages of that conversation.
