@@ -32,7 +32,8 @@ accelerate>=1.0
 openai>=1.50
 tiktoken>=0.8
 chromadb>=1.0
-langchain>=1.0 langchain-openai>=1.0 langchain-tavily>=0.2   # optional: agents and web search
+langchain>=1.0 
+langchain-openai>=1.0   # optional: agents and web search
 
 # Notebooks. Already present if you installed Anaconda or JupyterLab.
 jupyterlab>=4.0
