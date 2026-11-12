@@ -32,13 +32,18 @@ def load_guides():
 
 @st.cache_resource(show_spinner='Loading the guides (once)...')
 def load_core():
-    """The embedding model, saved index and the agent, ONCE per session (not on every rerun).
+    """The embedding model, the index and the agent, loaded ONCE and shared by every rerun.
 
-    LLM track:   return the Chroma collection and anything else the pipeline needs.
-                 Read the key with st.secrets["OPENAI_API_KEY"] or from .env, never from the code.
+    If no saved index exists (e.g. on Streamlit Cloud, where models/ is not in the repo),
+    it is built once from the chunks, as in notebook 02.
     """
     embedder = load_embedder()
-    collection = open_collection()
+    try:
+        collection = open_collection()
+    except Exception:
+        guide_chunks = load_chunks()
+        embeddings = embedder.encode(guide_chunks["embed_text"].tolist(), normalize_embeddings=True, batch_size=64)
+        collection = make_collection(guide_chunks, embeddings)
     agent = make_agent(collection, embedder, VISITED_FILE, memory=True)
     return embedder, collection, agent
 
