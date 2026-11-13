@@ -1,256 +1,238 @@
 ![Ironhack logo](https://user-images.githubusercontent.com/23629340/40541063-a07a0a8a-601a-11e8-91b5-2f13e4e6b441.png)
 
-# Project 3 | AI Product: From Model to Product
+# Project 3 | AI Product: Mountain Goat 🐐
 
 *Data Science & Machine Learning — Week 9, the final project*
 
-Build a small AI product that someone could actually use. You will frame a problem, build either a trained NLP model or an LLM application, evaluate it honestly against a baseline, and put it in the hands of a user through a **Streamlit app** that you demo live.
+**Mountain Goat** is an AI agent for hikers and nature travellers exploring the mountains and national parks of the Balkans. It answers questions from the Wikivoyage travel guides, always with the source, says *"I don't know"* when the guides don't cover a question, and recommends where to go next based on the places you have visited and how you rated them.
+
+**Track:** LLM (a RAG pipeline used as the main tool of an agent) · **App:** https://mountain-goat-agent.streamlit.app
 
 `Python` · `NLP` · `Transformers` · `Embeddings` · `LLM APIs` · `RAG` · `Agents` · `Evaluation` · `Streamlit` · `MLOps`
 
----
 
-## Overview
 
-This is the last project of the bootcamp, and the most open one. Weeks 7 and 8 gave you two ways to build with language: **train a model** (TF-IDF, embeddings, a fine-tuned transformer) or **build on an LLM** (prompts, RAG, tools). Project 3 asks you to pick one, take it all the way to a working app, and prove that it works.
+## 1. Project Overview
 
-- **Format** — in pairs or on your own. Working in a pair, divide the work by stage (data, core, evaluation, app), not by person-per-notebook, and run each other's code every day.
-- **Duration** — launch on Friday of Week 8, 4 working days, presentations on Friday of Week 9.
-- **Tools** — Python, pandas, scikit-learn, sentence-transformers, Hugging Face `transformers`, the OpenAI API, LangChain (optional), Chroma, MLflow (optional), Streamlit, GitHub.
-- **Repository** — click **Use this template** at the top of this page to create your own repo.
+**The problem:** an LLM on its own answers travel questions fluently, but it invents details (fees, routes, huts) and cannot say where its answers come from. In the mountains, **a confident wrong answer is the costliest mistake**, because a hiker acts on it. Mountain Goat answers only from the guides, cites them, and refuses when they don't cover the question.
 
-### The goal
+The project follows these steps:
+**Frame** (user, metric) → **Data** (download, clean, chunk) → **Evaluation set** (written before building) → **Baseline** (the LLM alone) → **RAG pipeline** → **Design choices** (chunk size, `k`, filter) → **Agent** (tools, memory, step limit) → **Evaluate once** → **App**.
 
-Answer one question for one kind of user, with an AI component they can use: *Is this review a complaint? What do customers say about the battery? Which of my products have a quality problem?* By Friday you should be able to say what your product does, for whom, how well it works compared with a simple alternative, what it costs to run, and where it should not be trusted.
 
-> [!IMPORTANT]
-> Choose your track, your data and your user on launch day, and stick with them. By Wednesday your evaluation is built around them; switching costs four days of work in two.
 
-<br>
+## 2. The Task
 
-## Choose your track
-
-Every project has **one AI core** and **one app**. You choose the core:
-
-| | **Model track** | **LLM track** |
-|---|---|---|
-| **The core** | A model you train and evaluate: a text classifier, a rating predictor, a topic or aspect model | An LLM application: RAG over documents, an agent with tools, structured extraction at scale |
-| **From the course** | Week 7: TF-IDF, embeddings, fine-tuning; Week 5: pipelines, validation | Week 7: the OpenAI API, RAG; Week 8: agents and tools |
-| **The baseline** | A dummy model, then TF-IDF with a linear model | The LLM alone (no retrieval, no tools), or a keyword search |
-| **The evaluation** | A held-out test set, used once; the right metric for the decision | An evaluation set of at least 15 questions, written **before** you build, with the expected answer or source |
-| **Also report** | Training time and model size | The cost and the time per question |
-| **The app** | Loads the saved model and predicts for new text | Calls your pipeline and shows the answer with its sources |
-
-You may do both (for example, a sentiment model whose predictions feed an LLM summary), but one done well beats two done halfway. **The app is mandatory on both tracks.**
-
-<br>
-
-## Choose your data
-
-The default dataset is **Amazon Reviews 2023**: real product reviews with a star rating, a title, the text and the product's description, from a research dataset published by the McAuley Lab at UC San Diego. Read [`data/README.md`](data/README.md) for the fields, the categories, the traps to watch for, and how to cite it.
-
-```bash
-python download_data.py                                  # Amazon reviews, Health_and_Personal_Care (the default), 345 MB
-python download_data.py amazon --category Gift_Cards     # another category, listed in data/README.md
-python download_data.py clothing                         # option 2: women's clothing reviews, public domain
-```
-
-The Amazon data has no stated licence: it is published for research, and you must cite it (the reference is in the data guide) and never commit it. The second option, **23,000 women's clothing reviews** released into the public domain, is smaller and licence-clear.
-
-Files land in `data/raw/`, which is gitignored. **Do not commit data.** Anyone cloning your repo runs the same script.
-
-Some project ideas on this data:
-
-- **Model track:** classify reviews as negative, neutral or positive from the text alone, and route the negative ones to a support team; predict the star rating; detect which aspect a complaint is about (quality, delivery, price, side effects).
-- **LLM track:** *Ask the reviews*, a RAG assistant that answers questions about a product from its reviews and cites them; a product-comparison agent with a retrieval tool and a calculator; an extractor that turns thousands of reviews into a table of complaints, then summarises it.
-
-> [!NOTE]
-> **Bringing your own data or topic?** You may, and you are graded on exactly the same rubric. You need a clear user and question, enough data for an honest evaluation (a few thousand labelled texts for the model track; a document collection and 15 test questions for the LLM track), and a licence that permits educational use. **No personal data** you are not allowed to process, and no confidential documents sent to an API. Clear it with your teacher on launch day, not on Wednesday.
-
-<br>
-
-## Day-by-day breakdown
-
-Launch day (Friday of Week 8) is when you settle who you are working with, choose your track, data and user, create your repo, download the data and write your framing — so Monday starts with the data in front of you.
-
-### Day 1 — Data and baseline
-
-- Finish **`01_framing_and_baseline.ipynb`**: what one row (or one document) is, data quality, and the distribution of what you predict or the kinds of questions you answer.
-- **Model track:** clean the text, define the target, **split once** (a fixed `random_state`, stratified), and score a dummy model and a TF-IDF baseline with cross-validation.
-- **LLM track:** prepare the documents (cleaning, chunking, metadata), write your **evaluation set** of at least 15 questions with the expected source of each answer, and score the baseline: the LLM alone, or a keyword search.
-
-> [!TIP]
-> By the end of today you should be able to say your metric and your baseline score out loud. If you cannot, you are behind.
-
-### Day 2 — Build the core
-
-Today is the core engineering day, and the one the week turns on.
-
-- **Model track:** compare **at least three approaches** on the same validation folds or the same validation set — for example TF-IDF with a linear model, sentence embeddings with a classifier, and a fine-tuned DistilBERT or a zero-shot model — in **`02_build.ipynb`**. Track the runs with MLflow if you can.
-- **LLM track:** build the full pipeline end to end — retrieval with metadata, a grounded prompt that cites its sources and says "I don't know", or an agent with its tools — and run it on a few questions from your evaluation set.
-
-> [!IMPORTANT]
-> **Anyone without an end-to-end result on Tuesday evening has no Wednesday.** Everything after this builds on it.
-
-### Day 3 — Evaluate and improve
-
-- **Model track:** tune the best approach, choose the final one, **evaluate it once on the test set**, analyse the errors (confusion matrix, per-class results, examples of mistakes), and **save** it.
-- **LLM track:** run the **whole evaluation set**: retrieval hit rate, whether answers cite the right sources, whether out-of-scope questions are refused, the cost per question. Make **one improvement** (chunk size, a filter, a better prompt, a stronger embedding model) and measure it on the same set.
-- Write the results in **`03_evaluate.ipynb`**, your report.
-
-### Day 4 — The app and the story
-
-- Build the **Streamlit app** in `app/streamlit_app.py`: it loads your saved model (or builds your pipeline) once with `st.cache_resource`, takes the user's input, and shows the result. Keys go in `.streamlit/secrets.toml` or `.env`, **never in the code**.
-- Check that someone else can run it from a fresh clone by following your README.
-- Write your README, build your slides, and **rehearse once, timed**.
-- *Optional:* deploy the app on Streamlit Community Cloud.
-
-> [!NOTE]
-> **Notebook 03 is your report.** It is read on its own, by someone who has not seen notebooks 01 and 02: the question, the evidence, what you concluded and how far to trust it.
-
-<br>
-
-## Deliverables
-
-Your main deliverable is your GitHub repo, created from this template, containing:
-
-| Item | Description |
+| | |
 |---|---|
-| `README.md` | Your project: the user and the question, the track, the data and its source, the baseline and the final result, the cost, the limitations, and **how to run the app**. Replace this brief with your own. |
-| `notebooks/01_framing_and_baseline.ipynb` | Framing, data, the split or the evaluation set, and the baseline. |
-| `notebooks/02_build.ipynb` | The approaches compared (model track) or the pipeline built (LLM track). |
-| `notebooks/03_evaluate.ipynb` | **The report.** The final evaluation, the error or failure analysis, the cost, and the limitations. |
-| `app/streamlit_app.py` | The app you demo. |
-| `src/functions.py` | Reusable functions, imported by the notebooks and the app. |
-| `requirements.txt` | Everything needed to run the notebooks and the app. |
-| Slides | Linked or committed in your README, so they can be read after the presentation. Any tool. |
+| **Who uses it** | A hiker or nature traveller planning a trip to the Balkans, at the planning stage |
+| **Input** | A question in plain English, plus their list of visited places with ratings |
+| **Output** | A short answer citing the Wikivoyage excerpts it used, or *"I don't know based on my guides"* |
+| **Decision it supports** | Where to go, and how to prepare: getting there, costs, where to sleep, what to watch out for |
+| **Main metrics** | **Grounded accuracy** (correct *and* citing the right article), **refusals** on out-of-scope questions, **retrieval hit rate** |
+| **Baseline** | The same LLM with no guides and no tools: 36% right overall, 0% grounded |
 
-Saved models in `models/`, your `.env` file and `.streamlit/secrets.toml` are gitignored. The README says how to recreate the model and where to put the keys.
+**Why these metrics:** the three possible mistakes have very different costs. A confident wrong answer (an invented trail, a wrong fee) is the costliest, because the user acts on it. An answer without a source is nearly as bad, because the user cannot tell it from a wrong one. A wrong refusal costs least: the user looks elsewhere. So answers must be correct **and** checkable, and questions the guides cannot answer must be refused. Retrieval is measured separately, because the agent can only answer from what the search finds.
 
-### Minimum requirements
 
-Your project must meet all of these to pass:
 
-- **Framing** — a stated user, the question or decision your product supports, and a metric chosen for that decision.
-- **Baseline** — a simple alternative scored with the same evaluation as your final solution.
-- **Honest evaluation** — *model track:* at least 3 approaches compared on the same validation, and the final model evaluated once on a held-out test set; *LLM track:* an evaluation set of at least 15 questions written before building, with retrieval or tool use checked, citations checked, and out-of-scope questions tested.
-- **Failure analysis** — where and why it goes wrong, with examples.
-- **Cost** — *LLM track:* the cost per question; *model track:* the training time and the size of the model.
-- **A working app** — runs from a fresh clone by following the README, and uses your saved model or your pipeline.
-- **No secrets in git** — no API key anywhere in the history.
+## 3. The Data
 
-The full grading rubric is in [`RUBRIC.md`](RUBRIC.md). Read it on launch day — it tells you exactly what is being evaluated.
+- **Source:** English [Wikivoyage](https://en.wikivoyage.org), downloaded through its public MediaWiki API with `python wikivoyage_balkans.py` (categories, park lists and destination links followed, every article checked against its location in Wikivoyage's region tree)
+- **Licence:** [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/): travel guide text by Wikivoyage contributors
+- **Scope:** **618 articles** for Albania, Bosnia and Herzegovina, Bulgaria, Croatia, Kosovo, Montenegro, North Macedonia, Romania and Serbia, downloaded on 6 November 2026. 
+- **Files:** `data/raw/wikivoyage_balkans.jsonl` (the articles) and `wikivoyage_balkans_manifest.json` (download date, licence, counts)
+- **Data quality**, found and handled in notebook 01:
+  - The text is wiki markup: listings (sights, hotels), maps, banners and unit templates. `clean_wikitext()` turns listings into readable lines with their price, hours and *last checked* date, keeps units (`{{eur|5}}` → €5) and removes the rest.
+  - **78% of articles are "outline" status** and 36% of sections have fewer than 15 words: coverage is uneven, so some questions have no answer in the data.
+  - **41% of listings were last checked in 2020 or earlier:** the dates are kept in the text, so answers can show how old a price is.
+  - **Surprising types:** Pirin National Park is tagged as a city, Matka Canyon as a district. Which articles count as *nature* is therefore decided by type **or** content (a park or rural area, or at least 1% nature words): 247 articles.
+  - **Contact details:** phone numbers and emails in listings are removed or masked, so none are sent to the API.
+  - **Diacritics:** 29% of titles (Žabljak); tested with a question typed without them.
+- **Chunks:** each article is split by section, and long sections into **105-word chunks with an overlap of 21**: **11,510 chunks**, each with its id (`wv-12`), title, country, section, URL and nature flag. 105 words because MiniLM reads at most 256 tokens: at 150 words, 10% of chunks went over the limit.
+- **Evaluation set:** `data/eval_questions.csv`, **22 questions** written before building: 18 the guides can answer (facts, practical, recommendations, safety, comparisons), across all 9 countries, each with the expected article, section and answer; and 4 they cannot (live snow conditions, a place in Slovenia, tomorrow's weather, a booking).
 
-<br>
 
-## Advanced features (optional)
 
-Not required, but they will strengthen your project:
+## 4. Pipeline Design
 
-- **Experiment tracking** — every run in MLflow, the final model registered and loaded by alias in the app.
-- **Both tracks** — a trained classifier that filters or routes reviews, and an LLM that summarises or answers from them.
-- **An LLM as a judge** — a second model that grades each answer against the expected one, checked by hand on a sample.
-- **Deployment** — the app live on Streamlit Community Cloud, with its keys in the platform's secrets.
-- **Monitoring** — a page in the app that shows the distribution of predictions or questions, and flags drift.
-- **Multimodal** — a photo or a voice question as input, with the cost measured.
+**1. Retrieval (RAG):** each chunk is embedded with **sentence-transformers `all-MiniLM-L6-v2`** and stored in a **Chroma** collection (cosine distance), saved in `models/chroma/`. A question is embedded with the same model, and the **5 closest chunks** are retrieved.
 
-<br>
+**2. The agent (LangChain `create_agent`, `gpt-5.4-nano`)** with two **read-only** tools:
 
-## Coding best practices
-
-- **Modularise.** Logic in `src/functions.py`, imported by both the notebooks and the app. The notebook is for the narrative.
-- **One seed.** Define `RANDOM_STATE` once and pass it everywhere, so a second run gives the same numbers.
-- **One model name.** Define the LLM and the embedding model once; log the tokens of every call.
-- **Keys out of code.** `.env` locally, `st.secrets` in the app, both gitignored. Check `git status` before every commit.
-- **Restart and run all.** Before you commit a notebook, run it top to bottom on a fresh kernel.
-- **Commit often.** Small, frequent commits with descriptive messages.
-
-<br>
-
-## Presentation guidelines
-
-| Component | Duration |
+| Tool | What it does |
 |---|---|
-| Talking with slides | 7 minutes |
-| Live demo of the app | 3 minutes |
-| **Total** | **10 minutes** |
+| `search_guides(query)` | the RAG search: returns the 5 closest chunks with their ids, so the agent can cite them |
+| `get_visited_places()` | reads the user's travel log: places visited, rating 1–5, note |
 
-> [!IMPORTANT]
-> **You present from your own machine by sharing your screen.** The demo is your Streamlit app, running, on an example the audience can follow. Have it open and ready before your slot, with a second example in case the first one surprises you.
+The system prompt tells the agent to answer only from the tools, cite the excerpt ids (`[wv-12]`), never recommend a place already visited, and reply *"I don't know based on my guides."* otherwise. It has **memory** (a checkpointer and a `thread_id` per conversation) and a **step limit** of 10.
 
-### Suggested slide structure (~10 slides)
+**Read-only by design:** a tool that writes turns a wrong answer into a wrong action, so the agent never changes the travel log. The user adds and removes places through the app's form (`add_visit()`, `remove_visit()`), which only accepts places from the guides and ratings from 1 to 5.
 
-1. **Title** — project title and your name or names.
-2. **The user and the problem** — who uses it, and what they decide with it.
-3. **The data** — source, what one row or document is, the traps you found.
-4. **The metric and the baseline** — why this metric, and the score to beat.
-5. **What you built** — the approaches compared, or the pipeline, in one diagram.
-6. **The result** — the final evaluation against the baseline.
-7. **Where it goes wrong** — the failure analysis, with examples.
-8. **Cost and limits** — what it costs to run, and where it should not be trusted.
-9. **Conclusions and next steps** — would you ship it, and what would you do next?
-10. **Closing** — project title, your name or names, thank you.
+**Design choices, compared on the evaluation set** (notebook 02):
 
-<br>
+| Choice | Compared | Result | Kept |
+|---|---|---|---|
+| Chunk size | 100–150 words | 150 words: 10% of chunks over MiniLM's 256 tokens; 105 words: none (or almost none) | **105 words**, overlap 21 |
+| `k` and filter | k = 3 / 5, all articles / nature only | hit rate 83% (k = 3, all), 89% for the other three | **k = 5, no filter**: the filter adds nothing at k = 5 and would hide town articles |
 
-## Repo layout
 
-The notebooks are laid out in sections with the intent of each one written down, for both tracks, and `src/functions.py` and the app hold a few stubs that exist only to show the shape. **This is a place to start, not a template to fill in** — rename things, add sections, delete the ones for the other track. You are graded on the work, not on how closely you followed the scaffold.
+
+## 5. Repository Structure
 
 ```
-.
-├── README.md                          this brief — replace it with your own
-├── RUBRIC.md                          how you are graded
-├── requirements.txt
-├── download_data.py                   fetches the reviews into data/raw/
-├── .env.example                       the keys you need, without their values
-├── data/
-│   ├── raw/                           downloaded data, gitignored
-│   └── README.md                      the dataset, its fields, its traps, how to cite it
-├── models/                            saved models and indexes, gitignored
-├── notebooks/
-│   ├── 01_framing_and_baseline.ipynb  frame, look, split or evaluation set, baseline
-│   ├── 02_build.ipynb                 compare approaches, or build the pipeline
-│   └── 03_evaluate.ipynb              evaluate, analyse failures, cost — the report
+project-3-ai-product/
+│
 ├── app/
-│   └── streamlit_app.py               the app you demo
-└── src/
-    └── functions.py                   your reusable logic
+│   ├── streamlit_app.py                     # the app: Home, the agent (chat and My places), Gallery, About
+│   └── gallery/jpgs.csv                     # gallery photos: Wikimedia Commons URLs with their credits
+│
+├── data/
+│   ├── raw/                                 # downloaded by download_data.py (gitignored)
+│   │   ├── .gitkeep                         # keeps the empty folder in git
+│   │   ├── wikivoyage_balkans.jsonl         # the 619 articles, raw wikitext
+│   │   └── wikivoyage_balkans_manifest.json # download date, licence, counts
+│   ├── processed/
+│   │   ├── chunks.jsonl                     # the 11,510 chunks (committed for deployment; CC BY-SA)
+│   │   └── demo_visited.csv                 # the demo travel log used in notebooks 02 and 03
+│   ├── eval_questions.csv                   # the 22 evaluation questions
+│   ├── baseline_llm_answers.csv             # the LLM-alone answers, saved once
+│   ├── baseline_labels.csv                  # their labels
+│   ├── agent_answers.csv                    # the agent's answers to the 22 questions, saved once
+│   ├── agent_answers_tools.csv              # the agent's answers to the 4 tool-choice tests
+│   └── visited_places.csv                   # your travel log, written by the app (gitignored)
+│
+├── models/chroma/                           # the Chroma index (gitignored, rebuilt by notebook 02 or the app)
+│
+├── notebooks/
+│   ├── 01_framing_and_baseline.ipynb        # framing, data quality, EDA, chunks, evaluation set, baseline
+│   ├── 02_build.ipynb                       # the RAG pipeline, design choices, the agent
+│   └── 03_evaluate.ipynb                    # the report: evaluation, failure analysis, cost, conclusions
+│
+├── src/functions.py                         # all reusable logic, imported by the notebooks and the app
+├── wikivoyage_balkans.py                    # fetches the Wikivoyage articles into data/raw/
+├── .streamlit/config.toml                   # the app's theme
+├── .env                                     # the key needed
+├── requirements.txt
+├── RUBRIC.md
+└── README.md
 ```
 
-## Getting set up
+**Main functions in `src/functions.py`:**
+
+| Part | Functions |
+|---|---|
+| Loading and cleaning | `load_articles()`, `split_sections()`, `clean_wikitext()`, `nature_terms_per_1k()`, `build_chunks()`, `save_chunks()` |
+| Baseline | `load_eval_set()`, `cost()`, `track()`, `ask_llm_alone()`, `run_llm_baseline()`, `labels_summary()` |
+| RAG | `load_embedder()`, `make_collection()`, `open_collection()`, `retrieve()`, `build_context()`, `answer()`, `hit_rate()` |
+| Agent | `make_tools()`, `make_agent()`, `run_agent()`, `show_trace()`, `load_visited()`, `add_visit()`, `remove_visit()` |
+| Evaluation | `run_agent_eval()`, `check_answers()` |
+
+
+
+## 6. Results
+
+**The agent against the baseline, on the same 22 questions** (notebook 03, each answer labelled by hand):
+
+| | LLM alone (baseline) | **Mountain Goat** |
+|---|---|---|
+| Correct on the 18 answerable questions | 28% (5) | **67% (12)** |
+| Correct **and** citing the right article (grounded) | 0% | **67% (12)** |
+| Out-of-scope questions refused | 75% (3 of 4) | **100% (4 of 4)** |
+| **Right overall** (all 22) | 36% (8) | **73% (16)** |
+
+- **Retrieval:** the expected article is in the top 5 for **89%** (16 of 18) of the answerable questions.
+- **By kind:** facts 6 of 7 correct, practical questions 3 of 4, safety 1 of 2, comparisons 1 of 2, recommendations 1 of 3 (the other 2 refused).
+- **Tool choice:** 4 of 4 tool-choice tests used the right tools (e.g. reading the travel log before recommending).
+
+**Where it goes wrong** (6 failures, each classified):
+
+| Type | Question | What happened |
+|---|---|---|
+| Retrieval | Can I drive to Theth in winter? | Thethi was not retrieved; the agent gave general driving advice and **missed that the road is closed from November to April**. The most serious failure. |
+| Retrieval | Via ferrata in Kosovo | The agent's own search query found Kosovo's towns, not the Rugova Mountains; it refused. |
+| Retrieval | A multi-day trek in the Accursed Mountains | The English name; the article is *Prokletije*. It refused. |
+| Generation | Plitvice adult ticket in July | It picked the wrong ticket type from a section with many prices. |
+| Generation | Hiking off-trail around Valbona | The right article, likely not the *Stay safe* section; it refused. |
+| Generation | Swimming at Plitvice or Krka | Answered for Krka, refused for Plitvice. |
+
+**Cost and speed:** about $0.00047 and 2.4-4.5 sec per question, about twice the cost of a plain RAG answer, because the agent makes several model calls. 1,000 questions a day would cost about $14.04 a month.
+
+**Verdict:** worth shipping as a **research aid** that always shows its sources, **not** as a safety or route-planning tool.
+
+
+
+## 7. Limitations and Next Steps
+
+**It should not be trusted for:**
+- **Live information:** weather, snow and trail conditions, opening today.
+- **Exact prices:** sections with several ticket types confuse it, and many prices are years old (check the *last checked* dates).
+- **Places outside the nine countries** (Slovenia, Greece) and **names the guides do not use** (Accursed Mountains vs Prokletije).
+- **Safety decisions and route planning:** it can miss a critical detail, as with the road to Theth.
+
+**Other limits:** the design choices were made on the evaluation set, so its retrieval scores are slightly optimistic; 22 questions is small (one question ~ 6 points); the travel log is a single CSV file, shared by everyone on a public deployment and reset when the app restarts.
+
+**With more time:**
+- add English and alternative place names to the chunks (Accursed Mountains → Prokletije);
+- improve retrieval at section level, so *Stay safe* or *Fees and permits* is found for safety and price questions;
+- a larger evaluation set, with more recommendation questions;
+- one travel log per user (a database);
+- expand to more of Europe, so someone who loved the Alps can discover similar, less crowded places.
+
+
+
+## 8. The App
+
+`app/streamlit_app.py` has four pages, chosen in the sidebar:
+
+- **🏔️ Home:** what Mountain Goat is.
+- **ℹ️ About:** the data, how it works, the evaluation and the limits.
+- **🐐 Mountain Goat:** the chat (with memory, the cited sources as expanders with links to Wikivoyage, a clear message when the guides don't cover a question, and the tools, tokens, cost and time of each answer), and **My places**: a form to add or remove places with a rating and a note, and the travel log.
+- **📸 Gallery:** photos of places in the guides, with links to their articles and their credits.
+
+The embedding model, the index and the agent are loaded **once** with `st.cache_resource`. If no saved index exists (e.g. on Streamlit Cloud), the app builds it from `data/processed/chunks.jsonl` on its first start, which takes a few minutes.
+
+
+
+## 9. How to Run
+
+Built with Python [TODO: your version, e.g. 3.12].
 
 ```bash
-# 1. Click "Use this template" above, then clone YOUR new repo
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
+# 1. Clone the repository
+git clone https://github.com/jkrstevska/project-3-ai-product/tree/main
 
-# 2. Install what you need (read the note at the top of requirements.txt first)
+# 2. Create a virtual environment and install the libraries
+python3 -m venv .venv
+source .venv/bin/activate            # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
-# 3. LLM track: copy .env.example to .env and add your keys (never commit .env)
-cp .env.example .env
+# 3. Add your OpenAI key (never commit .env)
+cp .env.example .env                 
 
-# 4. Download the data
+# 4. Download the Wikivoyage articles into data/raw/
 python download_data.py
 
-# 5. Open the first notebook, and later run the app
-jupyter lab notebooks/01_framing_and_baseline.ipynb
+# 5. Run the notebooks in order: 01 → 02 → 03
+#    01 saves the chunks, 02 builds the index in models/chroma/, 03 is the report
+jupyter lab notebooks/
+
+# 6. Run the app
 streamlit run app/streamlit_app.py
 ```
 
-<br>
+The saved answers in `data/` mean the evaluations are not re-run (and not paid for again) when the notebooks are re-run. To deploy on Streamlit Community Cloud, add `OPENAI_API_KEY = "sk-..."` under the app's **Settings → Secrets**.
 
-## Tips for success
 
-1. **Choose your track, data and user on launch day.** Switching mid-week costs you time you do not have.
-2. **Write the evaluation before you build.** A test set or an evaluation set decided on Monday keeps you honest on Thursday.
-3. **Beat the baseline before you beat anyone else.** A fine-tuned transformer that does not beat TF-IDF, or a RAG system that does not beat the LLM alone, is a finding — say so.
-4. **Start the app on Wednesday evening**, even if it only shows a title and a text box. Apps always take longer than you think.
-5. **Watch the cost.** Use `gpt-5.4-nano` while you build, and log the tokens of every call.
-6. **Keep keys out of git.** One leaked key and the project stops while it is revoked.
-7. **Ask for help early.** Stuck for more than 30 minutes? Reach out to a classmate, your TA or your teacher.
-8. **Practise the demo out loud** at least once before Friday. Time yourselves.
-9. **Read [`RUBRIC.md`](RUBRIC.md).** It tells you exactly what is being evaluated.
 
-Good luck. Build something you would trust someone else to use.
+## 10. Credits and Use of AI
+
+- **Travel guide text:** Wikivoyage (en.wikivoyage.org), by Wikivoyage contributors, licensed CC BY-SA. `data/processed/chunks.jsonl` is derived from it and committed under the same licence.
+- **Photos:** Wikimedia Commons; each photo's author and licence are in `app/gallery/jpgs.csv` and shown in the app.
+- **Use of AI:** I used Claude (Anthropic) as a coding assistant throughout the project. It wrote the first version of `wikivoyage_balkans.py`, most of the functions in `src/functions.py`, the app, and drafts of notebook cells, findings and the evaluation questions. I chose the project, the scope and the data; checked every output against the data; aligned the code with the methods taught in class (the RAG, Agents and Streamlit labs); made the design decisions (105-word chunks, k = 5, read-only agent tools); verified the evaluation answers in the articles; labelled every answer; and wrote and edited the final text.
+
+
+
+## 11. Author
+
+Jovana Krstevska
